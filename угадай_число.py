@@ -4,6 +4,9 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, Text
 from aiogram.types import Message, ContentType
 import random
+import datetime
+from dataclasses import dataclass
+
 
 #Токен Бота
 api: str = TOKEN
@@ -11,14 +14,6 @@ api: str = TOKEN
 #обьекты бота и диспатчера
 bot: Bot = Bot(api)
 dp: Dispatcher = Dispatcher()
-
-user: dict = {
-    'in-game': False,
-    'secret-number': None,
-    'attempts': None,
-    'total-game': 0,
-    'wins': 0
-}
 
 users: dict = {}
 
@@ -28,9 +23,22 @@ def getrandomnumber() -> int:
     return random.randint(0, 100)
 
 
-@dp.message(Command(commands=['start']))
+def my_admin_filter(message: Message) -> bool:
+    if message.text == '/admin' and message.from_user.id == 340906161:
+        return True
+    return False
+
+@dp.message(my_admin_filter)
+async def process_start_command(message: Message):
+    await message.answer(text='Это команда /admin')
+    print(message.from_user)
+
+
+
+
+@dp.message(lambda x: x.text == '/start')
 async def cmd_start(message: Message):
-    await message.answer('Давай сыграем в игру, угадай число?(напишите да или нет)\n/help для помощи')
+    await message.answer(f'Давай сыграем в игру, угадай число?(напишите да или нет)\n/help для помощи\nСегодня {datetime.date.today()}')
     if message.from_user.id not in users:
         users[message.from_user.id] = {
             'in-game': False,
@@ -67,7 +75,7 @@ async def yes_cmd(message: Message):
         await message.answer('Я загадал число от 0 до 100')
         users[message.from_user.id]['in-game'] = True
         users[message.from_user.id]['secret-number'] = getrandomnumber()
-        print(user['secret-number'])
+        print(users[message.from_user.id]['secret-number'])
         users[message.from_user.id]['attempts'] = attempts
     else:
         await message.answer('Пока мы играем в игру, я могу только реагировать на числа от 0 до 100 и команды /start , /cancel')
