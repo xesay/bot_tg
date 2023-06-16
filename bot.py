@@ -13,10 +13,10 @@ async def main() -> None:
     dp: Dispatcher = Dispatcher()
 
     #рег роутеров в диспетчере
-    dp.include_router(user_handlers.router)
+    dp.include_router(user_handlers.routegr)
     dp.include_router(other_handlers.router)
 
-
+    #TEST
     await bot.delete_webhook(drop_pending_updates=True) #Пропуск накопившихся апдейтов
     await dp.start_polling(bot)
 
