@@ -5,7 +5,6 @@ from handlers import other_handlers, user_handlers
 
 
 async def main() -> None:
-
     #Загружаем конфиг в переменную среду
     config: Config = load_config('.env.txt')
 
