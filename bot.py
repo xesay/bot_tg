@@ -2,6 +2,9 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from config2 import load_config, Config
 from handlers import other_handlers, user_handlers
+from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton
+
+
 
 
 async def main() -> None:
@@ -13,7 +16,7 @@ async def main() -> None:
     dp: Dispatcher = Dispatcher()
 
     #рег роутеров в диспетчере
-    dp.include_router(user_handlers.routegr)
+    dp.include_router(user_handlers.router)
     dp.include_router(other_handlers.router)
 
     #TEST
